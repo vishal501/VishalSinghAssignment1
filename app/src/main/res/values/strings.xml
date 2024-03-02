@@ -1,0 +1,10 @@
+
+<resources>
+    <string name="app_name">Vishal Assignment</string>
+    <string name="vishal">Vishal Singh</string>
+    <string name="users_list">Users List</string>
+    <string name="user">user</string>
+    <string name="assignment">Assignment</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
