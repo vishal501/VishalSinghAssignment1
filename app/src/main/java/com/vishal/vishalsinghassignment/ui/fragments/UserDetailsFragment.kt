@@ -24,7 +24,7 @@ class UserDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentUserDetailsBinding.inflate(inflater, container, false)
-        listnerView()
+        listenerView()
         return binding?.root
     }
 
@@ -32,11 +32,12 @@ class UserDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding?.apply {
             lifecycleOwner = viewLifecycleOwner
-            user = args.user
+            user = args.user //get user data by navigation argument
         }
     }
 
-    private fun listnerView(){
+    // go to the back page
+    private fun listenerView(){
        binding?.ivBack?.setOnClickListener {
            findNavController().popBackStack(R.id.userListFragment, false)
        }

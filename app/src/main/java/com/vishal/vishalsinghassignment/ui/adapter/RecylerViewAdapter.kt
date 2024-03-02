@@ -1,51 +1,64 @@
 package com.vishal.vishalsinghassignment.ui.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.vishal.vishalsinghassignment.R
 import com.vishal.vishalsinghassignment.database.entity.User
 import com.vishal.vishalsinghassignment.databinding.SingleListItemBinding
 
-class RecylerViewAdapter(private val listener: OnItemClickListener) :
-    RecyclerView.Adapter<RecylerViewAdapter.DeveloperViewHolder>() {
+class RecyclerViewAdapter(private val listener: OnItemClickListener) :
+    RecyclerView.Adapter<RecyclerViewAdapter.SampleViewHolder>() {
 
-    private var userList: ArrayList<User> = ArrayList() // Initialize userList
+    private var userList: ArrayList<User> = ArrayList()
+    private var filteredList: ArrayList<User> = ArrayList()
+
+    init {
+        filteredList.addAll(userList)
+    }
 
     fun setUserList(users: List<User>) {
         userList.clear()
         userList.addAll(users)
-        notifyDataSetChanged()
+        filter("")
     }
 
-    override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): DeveloperViewHolder {
-        val mDeveloperListItemBinding: SingleListItemBinding = DataBindingUtil.inflate(
-            LayoutInflater.from(viewGroup.context),
-            R.layout.single_list_item,
-            viewGroup,
-            false
-        )
-        return DeveloperViewHolder(mDeveloperListItemBinding)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SampleViewHolder {
+        val itemView = LayoutInflater.from(parent.context)
+            .inflate(R.layout.single_list_item, parent, false)
+        return SampleViewHolder(itemView)
     }
 
-    override fun onBindViewHolder(holder: DeveloperViewHolder, position: Int) {
-        val user = userList[position]
+    override fun onBindViewHolder(holder: SampleViewHolder, position: Int) {
+        val user = filteredList[position]
         holder.bind(user)
     }
 
     override fun getItemCount(): Int {
-        return userList.size
+        return filteredList.size
     }
 
-    inner class DeveloperViewHolder(private val binding: SingleListItemBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    //filter method for users
+    fun filter(query: String) {
+        filteredList.clear()
+        if (query.isEmpty()) {
+            filteredList.addAll(userList)
+        } else {
+            for (user in userList) {
+                if (user.name!!.contains(query, true)) {
+                    filteredList.add(user)
+                }
+            }
+        }
+        notifyDataSetChanged()
+    }
+
+    inner class SampleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val binding: SingleListItemBinding = SingleListItemBinding.bind(itemView)
 
         fun bind(user: User) {
             binding.user = user
-            binding.executePendingBindings()
-
-            // Set click listener
             binding.root.setOnClickListener {
                 listener.onItemClick(user)
             }
@@ -57,53 +70,3 @@ class RecylerViewAdapter(private val listener: OnItemClickListener) :
     }
 }
 
-//class RecylerViewAdapter(private val listener: OnItemClickListener) :
-//    RecyclerView.Adapter<RecylerViewAdapter.DeveloperViewHolder>() {
-//    private var userList: ArrayList<User>? = null
-//    override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): DeveloperViewHolder {
-//        val mDeveloperListItemBinding: SingleListItemBinding = DataBindingUtil.inflate(
-//            LayoutInflater.from(viewGroup.context),
-//            R.layout.single_list_item,
-//            viewGroup,
-//            false
-//        )
-//        return DeveloperViewHolder(mDeveloperListItemBinding)
-//    }
-//
-//    override fun onBindViewHolder(mDeveloperViewHolder: DeveloperViewHolder, i: Int) {
-//        val user: User = userList!![i]
-//        mDeveloperViewHolder.mDeveloperListItemBinding.user = user
-//        mDeveloperViewHolder.bind(user)
-//    }
-//
-//    override fun getItemCount(): Int {
-//        return if (userList != null) {
-//            userList!!.size
-//        } else {
-//            0
-//        }
-//    }
-//
-//    fun setUserList(userList: ArrayList<User>) {
-//        this.userList = userList
-//        notifyDataSetChanged()
-//    }
-//
-//    inner class DeveloperViewHolder(mDeveloperListItemBinding: SingleListItemBinding) :
-//        RecyclerView.ViewHolder(mDeveloperListItemBinding.getRoot()) {
-//        var mDeveloperListItemBinding: SingleListItemBinding
-//
-//        init {
-//            this.mDeveloperListItemBinding = mDeveloperListItemBinding
-//        }
-//
-//        fun bind(user: User?) {
-//            // click event for selected user details & passed to UI
-//            mDeveloperListItemBinding.layout.setOnClickListener { view -> listener.onItemClick(user) }
-//        }
-//    }
-//
-//    interface OnItemClickListener {
-//        fun onItemClick(user: User?)
-//    }
-//}

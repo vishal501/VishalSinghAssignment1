@@ -79,8 +79,6 @@ dependencies {
     implementation ("com.intuit.ssp:ssp-android:1.0.6")
     implementation ("com.intuit.sdp:sdp-android:1.0.6")
 
-    //Pagination
-    implementation ("androidx.paging:paging-runtime:3.0.0")
 
 
 }
